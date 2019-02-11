@@ -122,9 +122,7 @@ function renderQuestion() {
   let secondAnswer = QUESTIONS[STORE.viewIndex].secondAnswer;
   let thirdAnswer = QUESTIONS[STORE.viewIndex].thirdAnswer;
   let fourthAnswer = QUESTIONS[STORE.viewIndex].fourthAnswer;
-  let html = generateQuestion(questionText, firstAnswer, secondAnswer, thirdAnswer, fourthAnswer)
-  let statusHTML = generateStatus();
-  $('.status').html(statusHTML);
+  let html = generateQuestion(questionText, firstAnswer, secondAnswer, thirdAnswer, fourthAnswer);
   $('.view').html(html);
 }
 
@@ -134,18 +132,24 @@ function renderIncorrectAnswer() {
   $('.view').html(html);
 }
 
-/*function renderStatus() {
+function renderStatus() {
   let statusHTML = generateStatus();
-  $('.status').html(statusHTML);
+  if (STORE.viewStatus === "quiz") {
+    $('.status').html(statusHTML);
+  }
+  else {
+    $('.status').empty(statusHTML);
+    console.log("Status emptied");
   };
-} */
+}
+
 
 
 // Template generators (generates HTML based on data) 
 function generateStartView() {
   return `<h1>CLASSIC AUTHORS QUIZ</h1>
-  <h2>Ready to test your knowledge of classic literature authors?</h2>
- <button class="start-button">Start Quiz</button>`;
+    <h2>Ready to test your knowledge of classic literature authors?</h2>
+    <button class="start-button">Start Quiz</button>`;
 }
 
 
@@ -153,11 +157,14 @@ function generateQuestion(question, firstAnswer, secondAnswer, thirdAnswer, four
   let htmlQuestion = 
   `<h2>${question}</h2>
     <form class="answeroptions">
-    <label for="choice1"><input type="radio" id="choice1" name="answer" value="${firstAnswer}" required>${firstAnswer}</label> <br /><br />
-    <label for="choice2"><input type="radio" id="choice2" name="answer" value="${secondAnswer}" required>${secondAnswer}</label><br /><br />
-    <label for="choice3"><input type="radio" id="choice3" name="answer" value="${thirdAnswer}" required>${thirdAnswer}</label><br /><br />
-    <label for="choice4"><input type="radio" id="choice4" name="answer" value="${fourthAnswer}" required>${fourthAnswer}</label><br /><br />
-     <button type="submit" class="submit-button">Submit</button>
+      <fieldset>
+        <legend>Choose the correct author</legend>
+        <label for="choice1"><input type="radio" id="choice1" name="answer" value="${firstAnswer}" required>${firstAnswer}</label> <br /><br />
+        <label for="choice2"><input type="radio" id="choice2" name="answer" value="${secondAnswer}" required>${secondAnswer}</label><br /><br />
+        <label for="choice3"><input type="radio" id="choice3" name="answer" value="${thirdAnswer}" required>${thirdAnswer}</label><br /><br />
+        <label for="choice4"><input type="radio" id="choice4" name="answer" value="${fourthAnswer}" required>${fourthAnswer}</label><br /><br />
+      </fieldset>
+    <button type="submit" class="submit-button">Submit</button>
     </form>`;
   return htmlQuestion;
 }
@@ -175,18 +182,18 @@ function generateResults() {
   let endScore = "";
   
   if (STORE.score > 7 && STORE.score <=10) {
-    endScore = "you could write a book yourself"
+    endScore = "You could write a book yourself!"
   }
   else if (STORE.score > 4 && STORE.score <=7) {
-    endScore = "nice try, keep reading"
+    endScore = "Nice try, keep reading!"
   }
   else if (STORE.score > 0 && STORE.score <=4) {
-    endScore = "do you even have a library card?"
+    endScore = "Do you even have a library card?"
   }
 
   let htmlFinal =
   `
-  <h2>Congratulations! Your score is ${STORE.score}/10</h2>
+  <h2>Congratulations!<br> Your score is ${STORE.score}/10</h2>
   <p>${endScore}</p>
   <button type="reset" class="reset">Play Again</button>
   `;
@@ -220,7 +227,7 @@ function beginQuiz(){
     renderQuestion();
     STORE.viewStatus = "quiz";
     console.log(STORE);
-    
+    renderStatus();
     
    
   });   
@@ -238,7 +245,7 @@ function handleAnswerSubmitted() {
     else {
       renderIncorrectAnswer();
       }
-    //renderStatus();
+    renderStatus();
   }
     // Retrieve answer identifier of user-checked radio button
     // Perform check: User answer === Answer answer?
@@ -255,7 +262,7 @@ function nextQuestion(){
     console.log('nextQuestion ran');
     STORE.viewIndex++;
     renderQuestion();
-    //renderStatus();
+    renderStatus();
    }
   });
 }
@@ -268,7 +275,9 @@ function restartQuiz(){
     STORE.viewIndex = 0;
     STORE.viewStatus = "start";
     STORE.score = 0;
+    console.log(STORE.viewStatus);
     renderStart();
+    renderStatus();
   });
 }
 

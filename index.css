@@ -26,6 +26,8 @@ body {
     width: 20%;
     background: rgba(204, 204, 204, 0.8);
     border-radius: 25px;
+    margin: 5px;
+  
      
   }
 
@@ -87,5 +89,13 @@ p {
     font-weight: bold;
     } 
 
-
-
+/* accessibility-related */
+fieldset legend {
+  position: absolute;
+  left: -5000px;
+}
+fieldset {
+  border: 0;
+  padding: 0;
+  margin-left: 0px;
+}
