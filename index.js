@@ -172,7 +172,7 @@ function generateQuestion(question, firstAnswer, secondAnswer, thirdAnswer, four
 function generateStatus() {
   let htmlStatus = `
   <p>Question ${STORE.viewIndex + 1}/10 </p>
-  <p>Current score: ${STORE.score}/10</p>`;
+  <p>Current Score: ${STORE.score}/10</p>`;
   console.log("Generated Status");
   return htmlStatus;
   
